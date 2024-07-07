@@ -82,7 +82,8 @@ Now that your virtual environment is active, let's install the necessary librari
    ```
    pip list
    ```
-   You should see pygame, gym, and stable-baselines3 in the list
+
+You should see pygame, gym, and stable-baselines3 in the list
 
 ## 3. Creating Your First Pygame Window
 
@@ -175,7 +176,7 @@ Let's make sure your environment is set up correctly to ensure the coming weeks 
 1. Make sure you've activated your virtual environment before running the script.
 2. Make sure you're in the week1 folder in your terminal.
 3. Make sure you've installed the libraries correctly, you can test this by running `pip list` in your terminal.
-4. Please reach out to @aidangollan in the MSUAIClub Discord if you're having further trouble!
+4. Please reach out to `@aidangollan` in the MSUAIClub Discord if you're having further trouble!
 
 ## Wrapping Up
 
