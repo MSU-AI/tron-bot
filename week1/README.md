@@ -161,6 +161,13 @@ Let's make sure your environment is set up correctly to ensure the coming weeks 
    ```
 3. You should see the following output:
    ```
+   pygame 2.5.2 (SDL 2.28.3, Python 3.11.4)
+   Hello from the pygame community. https://www.pygame.org/contribute.html
+   Test 1 passed: Pygame is installed and initialized successfully.
+   Test 2 passed: Pygame window created successfully.
+   Test 3 passed: OpenAI Gym and Stable-Baselines3 are installed.
+
+   Tests passed: 3/3
    All tests passed! Your environment is set up correctly.
    ```
 
