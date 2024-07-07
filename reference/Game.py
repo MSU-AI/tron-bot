@@ -1,7 +1,7 @@
 import pygame
-import numpy as np
 from pygame.locals import *
 from GameObjects import Snake
+import time
 
 class Game:
     def __init__(self, show):
@@ -11,7 +11,6 @@ class Game:
         self.TILE_SIZE = 15
         self.HEIGHT = self.HEIGHT_GRID * self.TILE_SIZE
         self.WIDTH = self.WIDTH_GRID * self.TILE_SIZE
-        self.font = pygame.font.Font(None, 32)
         self.surface = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         self.snake1 = Snake(self.surface, self.WIDTH_GRID, self.HEIGHT_GRID, self.TILE_SIZE, (255, 0, 0))
         self.snake2 = Snake(self.surface, self.WIDTH_GRID, self.HEIGHT_GRID, self.TILE_SIZE, (0, 0, 255))
@@ -31,7 +30,8 @@ class Game:
         self.current_direction1 = self.directions1[K_RIGHT]
         self.current_direction2 = self.directions2[K_d]
         self.show = show
-        self.tick = 10
+        self.tick = 60
+        self.frame_times = []
 
     def handle_input(self):
         for event in pygame.event.get():  
@@ -44,24 +44,21 @@ class Game:
                 elif event.key in self.directions2:
                     self.current_direction2 = self.directions2[event.key]
 
-    def check_wall_col(self, snake):
-        head = snake.cords[0]
-        if head[0] < 0 or head[0] >= self.WIDTH or head[1] < 0 or head[1] >= self.HEIGHT:
+    def check_collisions(self):
+        head1, head2 = self.snake1.cords[0], self.snake2.cords[0]
+        
+        if (head1[0] < 0 or head1[0] >= self.WIDTH or head1[1] < 0 or head1[1] >= self.HEIGHT or
+            head2[0] < 0 or head2[0] >= self.WIDTH or head2[1] < 0 or head2[1] >= self.HEIGHT):
             return True
-        return False
 
-    def check_snake_collision(self, snake1, snake2):
-        head1 = snake1.cords[0]
-        head2 = snake2.cords[0]
-        # Check if snake1's head collides with snake2's body
-        if tuple(head1) in set(map(tuple, snake2.cords)):
+        if (self.snake1.check_self_col() or self.snake2.check_self_col()):
             return True
-        # Check if snake2's head collides with snake1's body
-        if tuple(head2) in set(map(tuple, snake1.cords)):
+
+        if (tuple(head1) in self.snake2.cords_set or
+            tuple(head2) in self.snake1.cords_set or
+            head1 == head2):
             return True
-        # Check if snakes' heads collide with each other
-        if head1 == head2:
-            return True
+
         return False
 
     def draw(self):
@@ -73,24 +70,37 @@ class Game:
     def run(self):
         if self.show:
             self.draw()
+        
         while True:
+            start_time = time.time()
+            
             self.handle_input()
             self.snake1.change_dir(self.current_direction1)
             self.snake2.change_dir(self.current_direction2)
             self.snake1.move()
             self.snake2.move()
             
-            if (self.check_wall_col(self.snake1) or self.snake1.check_self_col() or
-                self.check_wall_col(self.snake2) or self.snake2.check_self_col() or
-                self.check_snake_collision(self.snake1, self.snake2)):
+            if self.check_collisions():
+                self.print_benchmark()
                 return "Game Over"
-            
-            self.snake1.update_cords_set()
-            self.snake2.update_cords_set()
             
             if self.show:
                 self.draw()
-                self.clock.tick(self.tick)
+            
+            end_time = time.time()
+            self.frame_times.append(end_time - start_time)
+            
+            self.clock.tick(self.tick)
+
+    def print_benchmark(self):
+        if sum(self.frame_times) == 0 or len(self.frame_times) == 0:
+            print("No frames recorded")
+            return
+        
+        avg_frame_time = sum(self.frame_times) / len(self.frame_times)
+        fps = 1 / avg_frame_time
+        print(f"Average frame time: {avg_frame_time:.6f} seconds")
+        print(f"Average FPS: {fps:.2f}")
 
 if __name__ == "__main__":
     game = Game(show=True)
