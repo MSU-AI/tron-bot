@@ -35,6 +35,12 @@ class GameBoard:
         :param y: Y-coordinate to check
         :return: True if collision, False otherwise
         """
+        print(f"Checking collision at {x}, {y}")
+        print(f"Width: {self.width}, Height: {self.height}")
         if x < 0 or x >= self.width or y < 0 or y >= self.height:
+            print(f"X < 0 {x < 0} and X >= width {x >= self.width}")
+            print(f"Y < 0 {y < 0} and Y >= height {y >= self.height}")
             return True
+        print(f"Checking cell {x}, {y}")
+        print(f"Cell value: {self.grid[y][x]}")
         return self.grid[y][x] != 0

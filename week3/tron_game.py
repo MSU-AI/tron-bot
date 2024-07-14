@@ -12,13 +12,7 @@ def initialize_game():
     pygame.display.set_caption("Tron Game")
     return screen
 
-def handle_events(player1, player2):
-    """
-    Handle Pygame events, including player input.
-    :param player1: Player object for player 1
-    :param player2: Player object for player 2
-    :return: False if the game should quit, True otherwise
-    """
+def handle_events(player1: Player, player2: Player) -> bool:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
@@ -41,14 +35,7 @@ def handle_events(player1, player2):
                 player2.change_direction([1, 0])
     return True
 
-def update_game_state(player1, player2, game_board):
-    """
-    Update the game state, including player movement and collision detection.
-    :param player1: Player object for player 1
-    :param player2: Player object for player 2
-    :param game_board: GameBoard object to check collisions against
-    :return: 0 if the game continues, 1 if player 1 loses, 2 if player 2 loses, 3 if it's a draw
-    """
+def update_game_state(player1: Player, player2: Player, game_board: GameBoard) -> int:
     # Store the next positions
     next_x1, next_y1 = player1.x + player1.direction[0], player1.y + player1.direction[1]
     next_x2, next_y2 = player2.x + player2.direction[0], player2.y + player2.direction[1]
@@ -74,12 +61,12 @@ def update_game_state(player1, player2, game_board):
     player2.move()
     
     # Update the game board
-    game_board.grid[player1.y][player1.x] = 1
-    game_board.grid[player2.y][player2.x] = 2
+    game_board.grid[player1.y][player1.x] = player1.player_id
+    game_board.grid[player2.y][player2.x] = player2.player_id
     
     return 0
 
-def draw_game(screen, game_board, player1, player2):
+def draw_game(screen: pygame.Surface, game_board: GameBoard, player1: Player, player2: Player):
     """
     Draw the current game state.
     :param screen: Pygame screen object to draw on

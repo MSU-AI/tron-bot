@@ -40,3 +40,14 @@ class Player:
         for x, y in self.trail:
             pygame.draw.rect(screen, self.color, 
                              (x * 20, y * 20, 20, 20))
+
+    def reset(self, x, y):
+        """
+        Reset the player's position and trail.
+        :param x: New x-coordinate
+        :param y: New y-coordinate
+        """
+        self.x = x
+        self.y = y
+        self.direction = [1, 0] if self.player_id == 1 else [-1, 0]
+        self.trail = [(x, y)]
